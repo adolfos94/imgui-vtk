@@ -13,7 +13,7 @@
 
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
-// 
+//
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -34,13 +34,13 @@
 // Include glfw3.h after our OpenGL definitions
 #include <GLFW/glfw3.h>
 
-void VtkViewer::isCurrentCallbackFn(vtkObject* caller, long unsigned int eventId, void* clientData, void* callData){
+void VtkViewer::isCurrentCallbackFn(vtkObject* caller, long unsigned int eventId, void* clientData, void* callData) {
 	bool* isCurrent = static_cast<bool*>(callData);
 	*isCurrent = true;
 }
 
-void VtkViewer::processEvents(){
-	if (!ImGui::IsWindowFocused() && !ImGui::IsWindowHovered()){
+void VtkViewer::processEvents() {
+	if (!ImGui::IsWindowFocused() && !ImGui::IsWindowHovered()) {
 		return;
 	}
 
@@ -56,51 +56,52 @@ void VtkViewer::processEvents(){
 
 	interactor->SetEventInformationFlipY(xpos, ypos, ctrl, shift, dclick);
 
-	if (ImGui::IsWindowHovered()){
-		if (io.MouseClicked[ImGuiMouseButton_Left]){
+	if (ImGui::IsWindowHovered()) {
+		if (io.MouseClicked[ImGuiMouseButton_Left]) {
 			interactor->InvokeEvent(vtkCommand::LeftButtonPressEvent, nullptr);
 		}
-		else if (io.MouseClicked[ImGuiMouseButton_Right]){
+		else if (io.MouseClicked[ImGuiMouseButton_Right]) {
 			interactor->InvokeEvent(vtkCommand::RightButtonPressEvent, nullptr);
 			ImGui::SetWindowFocus(); // make right-clicks bring window into focus
 		}
-		else if (io.MouseWheel > 0){
+		else if (io.MouseWheel > 0) {
 			interactor->InvokeEvent(vtkCommand::MouseWheelForwardEvent, nullptr);
 		}
-		else if (io.MouseWheel < 0){
+		else if (io.MouseWheel < 0) {
 			interactor->InvokeEvent(vtkCommand::MouseWheelBackwardEvent, nullptr);
 		}
 	}
 
-	if (io.MouseReleased[ImGuiMouseButton_Left]){
+	if (io.MouseReleased[ImGuiMouseButton_Left]) {
 		interactor->InvokeEvent(vtkCommand::LeftButtonReleaseEvent, nullptr);
 	}
-	else if (io.MouseReleased[ImGuiMouseButton_Right]){
+	else if (io.MouseReleased[ImGuiMouseButton_Right]) {
 		interactor->InvokeEvent(vtkCommand::RightButtonReleaseEvent, nullptr);
 	}
 
 	interactor->InvokeEvent(vtkCommand::MouseMoveEvent, nullptr);
 }
 
-VtkViewer::VtkViewer() 
+VtkViewer::VtkViewer()
 	: viewportWidth(0), viewportHeight(0), renderWindow(nullptr), interactor(nullptr), interactorStyle(nullptr),
-	renderer(nullptr), tex(0), firstRender(true){
+	renderer(nullptr), tex(0), firstRender(true) {
 	init();
 }
 
-VtkViewer::VtkViewer(const VtkViewer& vtkViewer) 
+VtkViewer::VtkViewer(const VtkViewer& vtkViewer)
 	: viewportWidth(0), viewportHeight(0), renderWindow(vtkViewer.renderWindow), interactor(vtkViewer.interactor),
 	interactorStyle(vtkViewer.interactorStyle), renderer(vtkViewer.renderer), tex(vtkViewer.tex),
-	firstRender(vtkViewer.firstRender){
+	firstRender(vtkViewer.firstRender) {
 }
 
-VtkViewer::VtkViewer(VtkViewer&& vtkViewer) noexcept 
+VtkViewer::VtkViewer(VtkViewer&& vtkViewer) noexcept
 	: viewportWidth(0), viewportHeight(0), renderWindow(std::move(vtkViewer.renderWindow)),
 	interactor(std::move(vtkViewer.interactor)), interactorStyle(std::move(vtkViewer.interactorStyle)),
-	renderer(std::move(vtkViewer.renderer)), tex(vtkViewer.tex), firstRender(vtkViewer.firstRender){
+	renderer(std::move(vtkViewer.renderer)), tex(vtkViewer.tex), firstRender(vtkViewer.firstRender) {
 }
 
-VtkViewer::~VtkViewer(){
+VtkViewer::~VtkViewer()
+{
 	renderer = nullptr;
 	interactorStyle = nullptr;
 	interactor = nullptr;
@@ -109,7 +110,8 @@ VtkViewer::~VtkViewer(){
 	glDeleteTextures(1, &tex);
 }
 
-VtkViewer& VtkViewer::operator=(const VtkViewer& vtkViewer){
+VtkViewer& VtkViewer::operator=(const VtkViewer& vtkViewer)
+{
 	viewportWidth = vtkViewer.viewportWidth;
 	viewportHeight = vtkViewer.viewportHeight;
 	renderWindow = vtkViewer.renderWindow;
@@ -121,8 +123,8 @@ VtkViewer& VtkViewer::operator=(const VtkViewer& vtkViewer){
 	return *this;
 }
 
-void VtkViewer::init(){
-
+void VtkViewer::init()
+{
 	renderer = vtkSmartPointer<vtkRenderer>::New();
 	renderer->ResetCamera();
 	renderer->SetBackground(DEFAULT_BACKGROUND);
@@ -135,7 +137,7 @@ void VtkViewer::init(){
 	interactor->SetInteractorStyle(interactorStyle);
 	interactor->EnableRenderOff();
 
-	int viewportSize[2] = {static_cast<int>(viewportWidth), static_cast<int>(viewportHeight)};
+	int viewportSize[2] = { static_cast<int>(viewportWidth), static_cast<int>(viewportHeight) };
 
 	renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	renderWindow->SetSize(viewportSize);
@@ -152,21 +154,24 @@ void VtkViewer::init(){
 	renderWindow->AddRenderer(renderer);
 	renderWindow->SetInteractor(interactor);
 
-	if (!renderer || !interactorStyle || !renderWindow || !interactor){
+	if (!renderer || !interactorStyle || !renderWindow || !interactor) {
 		throw VtkViewerError("Couldn't initialize VtkViewer");
 	}
 }
 
-void VtkViewer::render(){
+void VtkViewer::render()
+{
 	render(ImGui::GetContentRegionAvail());
 }
-void VtkViewer::render(const ImVec2 size){
+
+void VtkViewer::render(const ImVec2 size)
+{
 	setViewportSize(size);
 
 	renderWindow->Render();
 	renderWindow->WaitForCompletion();
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::BeginChild("##Viewport", size, true, VtkViewer::NoScrollFlags());
 	ImGui::Image(reinterpret_cast<void*>(tex), ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 	processEvents();
@@ -174,34 +179,41 @@ void VtkViewer::render(const ImVec2 size){
 	ImGui::PopStyleVar();
 }
 
-void VtkViewer::addActor(const vtkSmartPointer<vtkProp>& actor){
+void VtkViewer::addActor(const vtkSmartPointer<vtkProp>& actor)
+{
 	renderer->AddActor(actor);
 	renderer->ResetCamera();
 }
 
-void VtkViewer::addActors(const vtkSmartPointer<vtkPropCollection>& actors){
+void VtkViewer::addActors(const vtkSmartPointer<vtkPropCollection>& actors)
+{
 	actors->InitTraversal();
+
 	vtkProp* actor;
 	vtkCollectionSimpleIterator sit;
-	for (actors->InitTraversal(sit); (actor = actors->GetNextProp(sit));){
+
+	for (actors->InitTraversal(sit); (actor = actors->GetNextProp(sit));)
+	{
 		renderer->AddActor(actor);
 		renderer->ResetCamera();
 	}
 }
 
-void VtkViewer::removeActor(const vtkSmartPointer<vtkProp>& actor){
+void VtkViewer::removeActor(const vtkSmartPointer<vtkProp>& actor)
+{
 	renderer->RemoveActor(actor);
 }
 
-void VtkViewer::setViewportSize(const ImVec2 newSize){
-	if (((viewportWidth == newSize.x && viewportHeight == newSize.y) || viewportWidth <= 0 || viewportHeight <= 0) && !firstRender){
+void VtkViewer::setViewportSize(const ImVec2 newSize)
+{
+	if (((viewportWidth == newSize.x && viewportHeight == newSize.y) || viewportWidth <= 0 || viewportHeight <= 0) && !firstRender) {
 		return;
 	}
 
 	viewportWidth = static_cast<unsigned int>(newSize.x);
 	viewportHeight = static_cast<unsigned int>(newSize.y);
 
-	int viewportSize[] = {static_cast<int>(newSize.x), static_cast<int>(newSize.y)};
+	int viewportSize[] = { static_cast<int>(newSize.x), static_cast<int>(newSize.y) };
 
 	// Free old buffers
 	glDeleteTextures(1, &tex);

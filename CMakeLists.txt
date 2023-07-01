@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(imgui-vtk)
 
 set(CMAKE_CXX_STANDARD 11)
-# set(CMAKE_VERBOSE_MAKEFILE 1)
 set(APP_VERSION_MAJOR 1)
 set(APP_VERSION_MINOR 0)
 set(EXEC_NAME imgui_vtk)
