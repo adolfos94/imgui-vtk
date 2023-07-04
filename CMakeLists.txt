@@ -57,16 +57,18 @@ target_link_libraries(${EXEC_NAME} imgui)
 
 # VTK
 find_package(VTK COMPONENTS 
+ CommonColor
   CommonCore
-  CommonColor
-  CommonDataModel
-  FiltersCore
+  FiltersModeling
+  FiltersSources
   InteractionStyle
+  InteractionWidgets
+  RenderingAnnotation
+  RenderingContextOpenGL2
   RenderingCore
   RenderingFreeType
   RenderingGL2PSOpenGL2
   RenderingOpenGL2
-  QUIET
 )
 if (NOT VTK_FOUND)
   message(FATAL_ERROR "VTK not found!")

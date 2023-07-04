@@ -29,9 +29,6 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int argc, char* argv[])
 {
-	// Setup pipeline
-	auto actor = SetupDemoPipeline();
-
 	// Setup window
 	glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit()) {
@@ -83,7 +80,7 @@ int main(int argc, char* argv[])
 
 	VtkViewer* vtkViewer = new VtkViewer();
 	vtkViewer->getRenderer()->SetBackground(0, 0, 0); // Black background
-	vtkViewer->addActor(actor);
+	vtkViewer->addActors(GetConeAndOutline());
 
 	std::vector<VtkViewer*> vtkViewers {vtkViewer};
 
@@ -128,7 +125,7 @@ int main(int argc, char* argv[])
 				{
 					VtkViewer* vtkViewer = new VtkViewer();
 					vtkViewer->getRenderer()->SetBackground(0, 0, 0); // Black background
-					vtkViewer->addActor(actor);
+					vtkViewer->addActor(GetLorenzAttractor());
 
 					vtkViewers.push_back(vtkViewer);
 				}
@@ -195,9 +192,10 @@ int main(int argc, char* argv[])
 				renderer->SetBackgroundAlpha(vtk2BkgAlpha);
 
 				vtkViewer->render();
+
+				ImGui::End();
 			}
 		}
-		ImGui::End();
 
 		ImGui::Render();
 

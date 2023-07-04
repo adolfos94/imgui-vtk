@@ -1,6 +1,9 @@
 #pragma once
 #include <vtkActor.h>
+#include <vtkActorCollection.h>
+#include <vtkConeSource.h>
 #include <vtkSmartPointer.h>
+#include <vtkOutlineFilter.h>
 #include <vtkContourFilter.h>
 #include <vtkMath.h>
 #include <vtkNamedColors.h>
@@ -10,7 +13,7 @@
 #include <vtkShortArray.h>
 #include <vtkStructuredPoints.h>
 
-static vtkSmartPointer<vtkActor> SetupDemoPipeline()
+static vtkSmartPointer<vtkActor> GetLorenzAttractor()
 {
 	double Pr = 10.0; // The Lorenz parameters
 	double b = 2.667;
@@ -32,16 +35,6 @@ static vtkSmartPointer<vtkActor> SetupDemoPipeline()
 	auto zIncr = resolution / (zmax - zmin);
 
 	printf("The Lorenz Attractor\n");
-	printf("  Pr = %f\n", Pr);
-	printf("  b = %f\n", b);
-	printf("  r = %f\n", r);
-	printf("  integration step size = %f\n", h);
-	printf("  slice resolution = %d\n", resolution);
-	printf("  # of iterations = %d\n", iter);
-	printf("  specified range:\n");
-	printf("      x: %f, %f\n", xmin, xmax);
-	printf("      y: %f, %f\n", ymin, ymax);
-	printf("      z: %f, %f\n", zmin, zmax);
 
 	x = vtkMath::Random(xmin, xmax);
 	y = vtkMath::Random(ymin, ymax);
@@ -114,4 +107,45 @@ static vtkSmartPointer<vtkActor> SetupDemoPipeline()
 #endif
 
 	return actor;
+}
+
+static vtkNew<vtkActorCollection> GetConeAndOutline()
+{
+	vtkNew<vtkNamedColors> colors;
+
+	// Use a cone as a source.
+	vtkNew<vtkConeSource> source;
+	source->SetCenter(0, 0, 0);
+	source->SetRadius(1);
+	// Use the golden ratio for the height. Because we can!
+	source->SetHeight(1.6180339887498948482);
+	source->SetResolution(128);
+	source->Update();
+
+	// Pipeline
+	vtkNew<vtkPolyDataMapper> mapper;
+	mapper->SetInputConnection(source->GetOutputPort());
+	vtkNew<vtkActor> actor;
+	actor->SetMapper(mapper);
+	actor->GetProperty()->SetColor(colors->GetColor3d("peacock").GetData());
+	// Lighting
+	actor->GetProperty()->SetAmbient(0.3);
+	actor->GetProperty()->SetDiffuse(0.0);
+	actor->GetProperty()->SetSpecular(1.0);
+	actor->GetProperty()->SetSpecularPower(20.0);
+
+	// Get an outline of the data set for context.
+	vtkNew<vtkOutlineFilter> outline;
+	outline->SetInputData(source->GetOutput());
+	vtkNew<vtkPolyDataMapper> outlineMapper;
+	outlineMapper->SetInputConnection(outline->GetOutputPort());
+	vtkNew<vtkActor> outlineActor;
+	outlineActor->SetMapper(outlineMapper);
+	outlineActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+	vtkNew<vtkActorCollection> actorsCollection;
+	actorsCollection->AddItem(actor);
+	actorsCollection->AddItem(outlineActor);
+
+	return actorsCollection;
 }
