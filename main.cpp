@@ -19,9 +19,6 @@
 #include <vtkSmartPointer.h>
 #include <vtkActor.h>
 
-// File-Specific Includes
-#include "imgui_vtk_demo.h" // Actor generator for this demo
-
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);

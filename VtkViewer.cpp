@@ -154,9 +154,14 @@ void VtkViewer::init()
 	renderWindow->AddRenderer(renderer);
 	renderWindow->SetInteractor(interactor);
 
-	if (!renderer || !interactorStyle || !renderWindow || !interactor) {
+	orientationMarker = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
+	orientationMarker->SetOrientationMarker(GetAxesActor());
+	orientationMarker->SetInteractor(interactor);
+	orientationMarker->EnabledOn();
+	orientationMarker->InteractiveOn();
+
+	if (!renderer || !interactorStyle || !renderWindow || !interactor)
 		throw VtkViewerError("Couldn't initialize VtkViewer");
-	}
 }
 
 void VtkViewer::render()

@@ -17,6 +17,11 @@
 #include <vtkGenericRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkRenderer.h>
+#include <vtkOrientationMarkerWidget.h>
+#include <vtkCameraOrientationWidget.h>
+
+// File-Specific Includes
+#include "imgui_vtk_demo.h" // Actor generator for this demo
 
 // RGB Color in range [0.0, 1.0]
 #define DEFAULT_BACKGROUND 0.39, 0.39, 0.39
@@ -42,6 +47,7 @@ private:
 	vtkSmartPointer<vtkGenericRenderWindowInteractor> interactor;
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> interactorStyle;
 	vtkSmartPointer<vtkRenderer> renderer;
+	vtkSmartPointer<vtkOrientationMarkerWidget> orientationMarker;
 private:
 	unsigned int viewportWidth, viewportHeight;
 	unsigned int tex;
@@ -63,7 +69,7 @@ public:
 	IMGUI_IMPL_API void removeActor(const vtkSmartPointer<vtkProp>& actor);
 	void setViewportSize(const ImVec2 newSize);
 public:
-	static inline unsigned int NoScrollFlags(){
+	static inline unsigned int NoScrollFlags() {
 		return ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 	}
 public:

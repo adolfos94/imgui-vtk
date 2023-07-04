@@ -12,6 +12,7 @@
 #include <vtkProperty.h>
 #include <vtkShortArray.h>
 #include <vtkStructuredPoints.h>
+#include <vtkAxesActor.h>
 
 static vtkSmartPointer<vtkActor> GetLorenzAttractor()
 {
@@ -148,4 +149,11 @@ static vtkNew<vtkActorCollection> GetConeAndOutline()
 	actorsCollection->AddItem(outlineActor);
 
 	return actorsCollection;
+}
+
+static vtkNew<vtkAxesActor> GetAxesActor()
+{
+	vtkNew<vtkAxesActor> axesActor;
+
+	return axesActor;
 }
