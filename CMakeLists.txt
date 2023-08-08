@@ -9,7 +9,19 @@ set(EXEC_NAME imgui_vtk)
 # In this CMakeLists.txt file, components are all built separately and linked together
 # If you prefer to compile source files + dependencies (OpenGL loaders, imgui, VtkViewer, etc.)
 # together, please see CMakeLists-alt.txt
-add_executable(${EXEC_NAME} main.cpp)
+add_executable(${EXEC_NAME} 
+	"app_main.cpp"
+	"application.cpp"
+	"window/GLWindow.cpp"
+	"render/OpenGLContext.cpp"
+)
+
+target_include_directories(${EXEC_NAME} 
+	PRIVATE
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+		"render/"
+		"window/"
+)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
