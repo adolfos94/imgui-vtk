@@ -14,7 +14,7 @@ add_executable(${EXEC_NAME}
 	"application.cpp"
 	"window/GLWindow.cpp"
 	"render/OpenGLContext.cpp"
-)
+ "render/UIContext.cpp")
 
 target_include_directories(${EXEC_NAME} 
 	PRIVATE

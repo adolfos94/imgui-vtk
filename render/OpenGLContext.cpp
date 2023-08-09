@@ -25,21 +25,15 @@ bool render::OpenGLContext::init(window::IWindow* window)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	// Decide GLSL version
-#ifdef __APPLE__
-  // GLSL 150
-	const char* glsl_version = "#version 150";
-#else
-  // GLSL 130
-	const char* glsl_version = "#version 130";
-#endif
-
 	// Create window with graphics context
 	GLFWwindow* glWindow = glfwCreateWindow(
-		window->m_Width,
-		window->m_Height,
-		window->m_Title.c_str(),
+		m_Window->m_Width,
+		m_Window->m_Height,
+		m_Window->m_Title.c_str(),
 		NULL, NULL);
+
+	// Set GLFWwindow to GLWindow
+	m_Window->SetWindow(glWindow);
 
 	if (!glWindow)
 	{
@@ -57,7 +51,7 @@ bool render::OpenGLContext::init(window::IWindow* window)
 		return false;
 	}
 
-	window->SetWindow(glWindow);
+	glEnable(GL_DEPTH_TEST);
 
 	return true;
 }

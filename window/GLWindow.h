@@ -3,6 +3,7 @@
 #include <pch.h>
 #include <IWindow.hpp>
 #include <OpenGLContext.h>
+#include <UIContext.h>
 
 namespace window
 {
@@ -29,10 +30,12 @@ namespace window
 		}
 
 	private:
+
 		bool m_IsRunning = false;
 		GLFWwindow* m_Window = nullptr;
 
 		// Render contexts
 		std::unique_ptr<render::OpenGLContext> m_OpenGLRender;
+		std::unique_ptr<render::UIContext> m_UIRender;
 	};
 }

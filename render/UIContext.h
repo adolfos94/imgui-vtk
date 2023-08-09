@@ -5,7 +5,7 @@
 
 namespace render
 {
-	class OpenGLContext : public IRenderContext
+	class UIContext : public IRenderContext
 	{
 	public:
 
