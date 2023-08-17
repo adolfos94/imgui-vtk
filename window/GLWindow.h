@@ -4,6 +4,7 @@
 #include <IWindow.hpp>
 #include <OpenGLContext.h>
 #include <UIContext.h>
+#include <UIManager.h>
 
 namespace window
 {
@@ -37,5 +38,6 @@ namespace window
 		// Render contexts
 		std::unique_ptr<render::OpenGLContext> m_OpenGLRender;
 		std::unique_ptr<render::UIContext> m_UIRender;
+		std::unique_ptr<ui::UIManager> m_UIManager;
 	};
 }
