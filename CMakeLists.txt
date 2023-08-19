@@ -16,7 +16,10 @@ add_executable(${EXEC_NAME}
 	"render/OpenGLContext.cpp"
 	"render/UIContext.cpp" 
 	"ui/UIManager.cpp"
-	 "ui/panel/3DPanel.cpp" "ui/panel/3DPanel.h")
+	"ui/panel/3DPanel.cpp" 
+	"ui/panel/Inspector.cpp" 
+	"ui/panel/Console.cpp" 
+)
 
 target_include_directories(${EXEC_NAME} 
 	PRIVATE

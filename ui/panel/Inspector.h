@@ -8,21 +8,17 @@ namespace ui
 {
 	namespace panel
 	{
-		class ThreeDPanel : public IPanel
+		class InspectorPanel : public IPanel
 		{
 		public:
 
-			ThreeDPanel(const std::string& name);
+			InspectorPanel(const std::string& name);
 
 			// Inherited via IPanel
 			void gui() override;
 			void render() override;
 
 		private:
-
-			ImVec4 backgroundColor;
-
-			VtkViewer* vtkViewer = nullptr;
 		};
 	}
 }

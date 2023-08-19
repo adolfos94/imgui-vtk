@@ -2,6 +2,8 @@
 
 #include <pch.h>
 #include <ui/panel/IPanel.hpp>
+#include <ui/panel/Inspector.h>
+#include <ui/panel/Console.h>
 #include <ui/panel/3DPanel.h>
 
 namespace ui
@@ -17,14 +19,14 @@ namespace ui
 
 	private:
 
-		std::mutex m_panels_mutex;
-
-		std::list<ui::panel::IPanel*> m_panels;
-
 		void menu_gui();
-		void sidebar_gui();
+		void dock_gui();
 
-		void add_panel(ui::panel::IPanel::PanelType panelType);
-		void remove_panel(std::list<ui::panel::IPanel*>::iterator it);
+		const std::list<ui::panel::IPanel*> m_panels
+		{
+			new ui::panel::InspectorPanel(INSPECTOR_PANEL_NAME),
+			new ui::panel::ThreeDPanel(SCENE_PANEL_NAME),
+			new ui::panel::ConsolePanel(CONSOLE_PANEL_NAME),
+		};
 	};
 }
