@@ -10,14 +10,21 @@ namespace ui
 	{
 	public:
 
-		UIManager();
+		UIManager() {};
+		~UIManager() {};
 
 		void render();
 
-		void add_panel(ImGuiDir_ direction);
-
 	private:
 
+		std::mutex m_panels_mutex;
+
 		std::list<ui::panel::IPanel*> m_panels;
+
+		void menu_gui();
+		void sidebar_gui();
+
+		void add_panel(ui::panel::IPanel::PanelType panelType);
+		void remove_panel(std::list<ui::panel::IPanel*>::iterator it);
 	};
 }

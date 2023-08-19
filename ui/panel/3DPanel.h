@@ -11,16 +11,13 @@ namespace ui
 		{
 		public:
 
-			ThreeDPanel(const std::string& name, ImGuiDir_ _direction = ImGuiDir_Left);
+			ThreeDPanel(const std::string& name);
 
 			// Inherited via IPanel
-			void gui() override;
+			void gui(std::list<IPanel*>::iterator it) override;
 			void render() override;
 
 		private:
-
-			
-		
 		};
 	}
 }

@@ -1,6 +1,7 @@
 #include <memory>
 #include <string>
 #include <list>
+#include <mutex>
 
 // OpenGL Loader
 // This can be replaced with another loader, e.g. glad, but

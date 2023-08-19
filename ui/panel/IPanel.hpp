@@ -10,49 +10,36 @@ namespace ui
 		{
 		public:
 
-			IPanel(ImGuiDir_ _direction) 
+			enum PanelType
 			{
-				direction = _direction;
+				ThreeDPanel,
 			};
 
-			void addPanelCallbak(std::function<void(ImGuiDir_)> callback)
+			void removePanelCallback(std::function<void(std::list<IPanel*>::iterator)> callback)
 			{
-				addPanel = callback;
+				removePanel = callback;
 			}
 
-			virtual void gui() = 0;
+			inline std::string GetID()
+			{
+				return m_name + "##" + std::to_string((size_t)this);
+			}
+
+			virtual void gui(std::list<IPanel*>::iterator it) = 0;
 
 			virtual void render() = 0;
 
 		protected:
 
+			bool m_open = true;
 			std::string m_name;
-			ImGuiDir_ direction;
 
-			void begin_gui()
+			void begin_gui(std::list<IPanel*>::iterator it)
 			{
-				ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_MenuBar);
+				ImGui::Begin(GetID().c_str(), &m_open);
 
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::BeginMenu("Panel"))
-					{
-						if (ImGui::MenuItem("Split Right"))
-							addPanel(ImGuiDir_Right);
-
-						if (ImGui::MenuItem("Split Left"))
-							addPanel(ImGuiDir_Left);
-
-						if (ImGui::MenuItem("Split Down"))
-							addPanel(ImGuiDir_Down);
-
-						if (ImGui::MenuItem("Split Up"))
-							addPanel(ImGuiDir_Up);
-
-						ImGui::EndMenu();
-					}
-					ImGui::EndMenuBar();
-				}
+				if (!m_open)
+					std::thread(removePanel, it).detach();
 			}
 
 			void end_gui()
@@ -61,9 +48,8 @@ namespace ui
 			}
 
 		private:
-		
-			std::function<void(ImGuiDir_)> addPanel;
-			std::function<void()> removePanel;
+
+			std::function<void(std::list<IPanel*>::iterator it)> removePanel;
 		};
 	}
 }

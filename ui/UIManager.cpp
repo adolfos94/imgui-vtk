@@ -1,26 +1,66 @@
 #include "UIManager.h"
 
-
 void ui::UIManager::render()
 {
-	for (auto& panel : m_panels)
+	std::lock_guard<std::mutex> guard(m_panels_mutex);
+
+	menu_gui();
+	sidebar_gui();
+
+	for (auto it = m_panels.begin(); it != m_panels.end(); ++it)
 	{
-		panel->gui();
+		auto panel = (*it);
+
+		panel->gui(it);
 		panel->render();
 	}
-
 }
 
-void ui::UIManager::add_panel(ImGuiDir_ direction)
+void ui::UIManager::menu_gui()
 {
-	auto panel = new ui::panel::ThreeDPanel("3D Panel #" + std::to_string(m_panels.size()), direction);
-	panel->addPanelCallbak(std::bind(&UIManager::add_panel, this, direction));
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Panel"))
+		{
+			if (ImGui::MenuItem("3D Panel"))
+				std::thread(&UIManager::add_panel, this, panel::IPanel::PanelType::ThreeDPanel).detach();
+
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
+void ui::UIManager::sidebar_gui()
+{
+}
+
+void ui::UIManager::add_panel(ui::panel::IPanel::PanelType panelType)
+{
+	std::lock_guard<std::mutex> guard(m_panels_mutex);
+
+	ui::panel::IPanel* panel = nullptr;
+
+	switch (panelType)
+	{
+	case ui::panel::IPanel::ThreeDPanel:
+		panel = new ui::panel::ThreeDPanel("3D Panel");
+		break;
+	default:
+		break;
+	}
+
+	panel->removePanelCallback(std::bind(&UIManager::remove_panel, this, std::placeholders::_1));
 
 	m_panels.push_back(panel);
 }
 
-
-ui::UIManager::UIManager()
+void ui::UIManager::remove_panel(std::list<ui::panel::IPanel*>::iterator it)
 {
-	add_panel(ImGuiDir_Left);
+	std::lock_guard<std::mutex> guard(m_panels_mutex);
+
+	if (m_panels.empty())
+		return;
+
+	m_panels.erase(it);
 }

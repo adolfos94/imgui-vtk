@@ -1,20 +1,19 @@
 #include "3DPanel.h"
 
-ui::panel::ThreeDPanel::ThreeDPanel(const std::string& name, ImGuiDir_ _direction) : IPanel(_direction)
+void ui::panel::ThreeDPanel::gui(std::list<IPanel*>::iterator it)
 {
-	m_name = name;
-}
+	__super::begin_gui(it);
 
-void ui::panel::ThreeDPanel::gui()
-{
-	__super::begin_gui();
-
-	ImGui::Text("This is the 3D Panel!");
+	ImGui::Text(GetID().c_str());
 
 	__super::end_gui();
 }
 
 void ui::panel::ThreeDPanel::render()
 {
-	
+}
+
+ui::panel::ThreeDPanel::ThreeDPanel(const std::string& name)
+{
+	m_name = name;
 }
