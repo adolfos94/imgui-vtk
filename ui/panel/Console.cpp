@@ -3,7 +3,7 @@
 ImGuiTextBuffer ui::panel::ConsolePanel::Buf;
 ImGuiTextFilter ui::panel::ConsolePanel::Filter;
 ImVector<int>	ui::panel::ConsolePanel::LineOffsets;
-bool			ui::panel::ConsolePanel::AutoScroll;
+bool			ui::panel::ConsolePanel::AutoScroll = true;
 
 void ui::panel::ConsolePanel::gui()
 {
@@ -48,20 +48,29 @@ void ui::panel::ConsolePanel::render()
 
 		if (Filter.IsActive())
 		{
-			const char* buf_begin = Buf.begin();
-			const char* line = buf_begin;
-			for (int line_no = 0; line != NULL; line_no++)
+			for (int line_no = 0; line_no < LineOffsets.Size; line_no++)
 			{
-				const char* line_end = (line_no < LineOffsets.Size) ? buf_begin + LineOffsets[line_no] : NULL;
-				if (Filter.PassFilter(line, line_end))
-					TextColor(line, line_end);
+				const char* line_start = buf + LineOffsets[line_no];
+				const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
 
-				line = line_end && line_end[1] ? line_end : NULL;
+				if (Filter.PassFilter(line_start, line_end))
+					TextColor(line_start, line_end);
 			}
 		}
 		else
 		{
-			TextColor(Buf.begin());
+			ImGuiListClipper clipper;
+			clipper.Begin(LineOffsets.Size);
+			while (clipper.Step())
+			{
+				for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
+				{
+					const char* line_start = buf + LineOffsets[line_no];
+					const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
+					TextColor(line_start, line_end);
+				}
+			}
+			clipper.End();
 		}
 
 		ImGui::PopStyleVar();
@@ -78,12 +87,14 @@ void ui::panel::ConsolePanel::render()
 
 void ui::panel::ConsolePanel::TextColor(const char* text, const char* text_end)
 {
-	ImVec4 color;
+	ImVec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (strstr(text, "INFO"))
-		color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	else if (strstr(text, "WARN"))
+	std::string str(text, text_end);
+
+	if (str.find("WARN") != std::string::npos)
 		color = { 1.0f, 0.8f, 0.0f, 1.0f };
+	else if (str.find("ERROR") != std::string::npos)
+		color = { 0.8f, 0.2f, 0.0f, 1.0f };
 
 	ImGui::PushStyleColor(ImGuiCol_Text, color);
 
@@ -96,8 +107,10 @@ ui::panel::ConsolePanel::ConsolePanel(const std::string& name)
 {
 	m_name = name;
 
-	InfoLog("Console panel is ready!");
+	Clear();
+	
+	InfoLog("This is a info message!");
 	WarnLog("This is a warning message!");
 	ErrorLog("This is a error message!");
-	InfoLog("Console panel is ready!");
+	
 }
