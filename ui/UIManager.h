@@ -26,6 +26,7 @@ namespace ui
 		{
 			new ui::panel::InspectorPanel(INSPECTOR_PANEL_NAME),
 			new ui::panel::ThreeDPanel(SCENE_PANEL_NAME),
+			new ui::panel::ThreeDPanel("SCENE_PANEL_NAME"),
 			new ui::panel::ConsolePanel(CONSOLE_PANEL_NAME),
 		};
 	};

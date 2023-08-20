@@ -52,6 +52,9 @@ void ui::UIManager::dock_gui()
 	ImGui::DockBuilderDockWindow(SCENE_PANEL_NAME, dockScene);
 	ImGui::DockBuilderDockWindow(CONSOLE_PANEL_NAME, dockConsole);
 
+	ImGui::DockBuilderDockWindow("SCENE_PANEL_NAME", dockScene);
+
+
 	ImGui::DockBuilderFinish(id);
 
 	dock = false;
