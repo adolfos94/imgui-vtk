@@ -2,11 +2,19 @@
 
 void ui::panel::ThreeDPanel::gui()
 {
+	ImGuiWindow* cur_window = ImGui::FindWindowByName(m_name.c_str());
+
+	if (cur_window && cur_window->Hidden)
+		return;
+
 	ImGui::Begin(INSPECTOR_PANEL_NAME);
 
-	ImGui::Text("Scene");
-	ImGui::Separator();
-	ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
+	if (ImGui::CollapsingHeader(m_name.c_str()))
+	{
+		ImGui::Text("Scene");
+		ImGui::Separator();
+		ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
+	}
 
 	ImGui::End();
 }

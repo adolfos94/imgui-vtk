@@ -23,7 +23,6 @@ namespace ui
 			std::string m_name;
 
 		private:
-
 		};
 	}
 }
