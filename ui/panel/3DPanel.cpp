@@ -13,7 +13,7 @@ void ui::panel::ThreeDPanel::gui()
 	{
 		ImGui::Text("Scene");
 		ImGui::Separator();
-		ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
+		ImGui::ColorEdit3(GenerateNameWithID("Background Color").c_str(), (float*)&backgroundColor);
 	}
 
 	ImGui::End();
