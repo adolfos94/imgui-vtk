@@ -10,26 +10,23 @@ void ui::UIManager::render()
 		panel->gui();
 		panel->render();
 	}
-	
 }
 
 void ui::UIManager::menu_gui()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
 			1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate
 		);
-		
+
 		ImGui::EndMainMenuBar();
 	}
 }
 
 void ui::UIManager::dock_gui()
 {
-	static bool dock = true;
-
-	if (!dock)
+	if (!m_dock)
 		return;
 
 	ImVec2 workPos = ImGui::GetMainViewport()->WorkPos;
@@ -37,26 +34,22 @@ void ui::UIManager::dock_gui()
 
 	ImVec2 workSize = ImGui::GetMainViewport()->WorkSize;
 
-	ImGuiID id = ImGui::GetID("MainWindowGroup");	
+	ImGuiID id = ImGui::GetID("MainWindowGroup");
 	ImGui::DockBuilderRemoveNode(id);
 	ImGui::DockBuilderAddNode(id);
 
 	ImGui::DockBuilderSetNodeSize(id, workSize);
 	ImGui::DockBuilderSetNodePos(id, workPos);
 
-	ImGuiID dockInspector = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.2f, nullptr, &id);
-	ImGuiID dockScene = ImGui::DockBuilderSplitNode(id, ImGuiDir_Right, 0.8f, nullptr, &id);
-	ImGuiID dockConsole = ImGui::DockBuilderSplitNode(dockScene, ImGuiDir_Down, 0.2f, nullptr, &dockScene);
+	m_dockInspector = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.2f, nullptr, &id);
+	m_dockScene = ImGui::DockBuilderSplitNode(id, ImGuiDir_Right, 0.8f, nullptr, &id);
+	m_dockConsole = ImGui::DockBuilderSplitNode(m_dockScene, ImGuiDir_Down, 0.2f, nullptr, &m_dockScene);
 
-	ImGui::DockBuilderDockWindow(INSPECTOR_PANEL_NAME, dockInspector);
-	ImGui::DockBuilderDockWindow(SCENE_PANEL_NAME, dockScene);
-	ImGui::DockBuilderDockWindow(CONSOLE_PANEL_NAME, dockConsole);
-
-	ImGui::DockBuilderDockWindow("SCENE_PANEL_NAME", dockScene);
-
+	ImGui::DockBuilderDockWindow(INSPECTOR_PANEL_NAME, m_dockInspector);
+	ImGui::DockBuilderDockWindow(SCENE_PANEL_NAME, m_dockScene);
+	ImGui::DockBuilderDockWindow(CONSOLE_PANEL_NAME, m_dockConsole);
 
 	ImGui::DockBuilderFinish(id);
 
-	dock = false;
+	m_dock = false;
 }
-

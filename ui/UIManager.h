@@ -19,15 +19,18 @@ namespace ui
 
 	private:
 
-		void menu_gui();
-		void dock_gui();
+		bool m_dock = true;
 
-		const std::list<ui::panel::IPanel*> m_panels
+		ImGuiID m_dockInspector, m_dockConsole, m_dockScene;
+
+		std::list<ui::panel::IPanel*> m_panels
 		{
 			new ui::panel::InspectorPanel(INSPECTOR_PANEL_NAME),
 			new ui::panel::ThreeDPanel(SCENE_PANEL_NAME),
-			new ui::panel::ThreeDPanel("SCENE_PANEL_NAME"),
 			new ui::panel::ConsolePanel(CONSOLE_PANEL_NAME),
 		};
+
+		void menu_gui();
+		void dock_gui();
 	};
 }
