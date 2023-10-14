@@ -10,8 +10,7 @@ namespace ui
 		class ConsolePanel : public IPanel
 		{
 		public:
-
-			ConsolePanel(const std::string& name);
+			ConsolePanel(const std::string &name);
 
 			// Inherited via IPanel
 			void gui() override;
@@ -24,7 +23,7 @@ namespace ui
 				LineOffsets.push_back(0);
 			}
 
-			static void InfoLog(const char* fmt, ...) IM_FMTARGS(2)
+			static void InfoLog(const char *fmt, ...) IM_FMTARGS(1)
 			{
 				int old_size = Buf.size();
 				va_list args;
@@ -38,7 +37,7 @@ namespace ui
 						LineOffsets.push_back(old_size + 1);
 			}
 
-			static void WarnLog(const char* fmt, ...) IM_FMTARGS(2)
+			static void WarnLog(const char *fmt, ...) IM_FMTARGS(1)
 			{
 				int old_size = Buf.size();
 				va_list args;
@@ -52,7 +51,7 @@ namespace ui
 						LineOffsets.push_back(old_size + 1);
 			}
 
-			static void ErrorLog(const char* fmt, ...) IM_FMTARGS(2)
+			static void ErrorLog(const char *fmt, ...) IM_FMTARGS(1)
 			{
 				int old_size = Buf.size();
 				va_list args;
@@ -67,13 +66,12 @@ namespace ui
 			}
 
 		private:
+			static ImGuiTextBuffer Buf;
+			static ImGuiTextFilter Filter;
+			static ImVector<int> LineOffsets;
+			static bool AutoScroll;
 
-			static ImGuiTextBuffer     Buf;
-			static ImGuiTextFilter     Filter;
-			static ImVector<int>       LineOffsets;
-			static bool                AutoScroll;
-
-			static void TextColor(const char* text, const char* text_end = (const char*)0);
+			static void TextColor(const char *text, const char *text_end = (const char *)0);
 		};
 	}
 }

@@ -1,13 +1,13 @@
 #include "OpenGLContext.h"
 
-static void glfw_error_callback(int error, const char* description)
+static void glfw_error_callback(int error, const char *description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-bool render::OpenGLContext::init(window::IWindow* window)
+bool render::OpenGLContext::init(window::IWindow *window)
 {
-	__super::init(window);
+	IRenderContext::init(window);
 
 	// Setup window
 	glfwSetErrorCallback(glfw_error_callback);
@@ -26,7 +26,7 @@ bool render::OpenGLContext::init(window::IWindow* window)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create window with graphics context
-	GLFWwindow* glWindow = glfwCreateWindow(
+	GLFWwindow *glWindow = glfwCreateWindow(
 		m_Window->m_Width,
 		m_Window->m_Height,
 		m_Window->m_Title.c_str(),
@@ -66,11 +66,11 @@ void render::OpenGLContext::post_render()
 {
 	// TODO Check if glfwPollEvents needs to be moved to pre_render()
 	glfwPollEvents();
-	glfwSwapBuffers((GLFWwindow*)m_Window->GetWindow());
+	glfwSwapBuffers((GLFWwindow *)m_Window->GetWindow());
 }
 
 void render::OpenGLContext::end()
 {
-	glfwDestroyWindow((GLFWwindow*)m_Window->GetWindow());
+	glfwDestroyWindow((GLFWwindow *)m_Window->GetWindow());
 	glfwTerminate();
 }
