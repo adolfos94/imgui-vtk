@@ -11,7 +11,7 @@ void ui::panel::ConsolePanel::gui()
 
 void ui::panel::ConsolePanel::render()
 {
-	ImGui::Begin(m_name.c_str());
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoMove);
 
 	// Options menu
 	if (ImGui::BeginPopup("Options"))

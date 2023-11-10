@@ -19,8 +19,6 @@ namespace ui
 
 	private:
 
-		bool m_dock = true;
-
 		ImGuiID m_dockInspector, m_dockConsole, m_dockScene;
 
 		std::list<ui::panel::IPanel*> m_panels
@@ -30,7 +28,7 @@ namespace ui
 			new ui::panel::ConsolePanel(CONSOLE_PANEL_NAME),
 		};
 
-		void menu_gui();
-		void dock_gui();
+		void RenderGui();
+		void DockGui(ImGuiID dock_id);
 	};
 }

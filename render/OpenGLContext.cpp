@@ -26,7 +26,7 @@ bool render::OpenGLContext::init(window::IWindow *window)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create window with graphics context
-	GLFWwindow *glWindow = glfwCreateWindow(
+	GLFWwindow *glWindow = glfwCreateWindow(	
 		m_Window->m_Width,
 		m_Window->m_Height,
 		m_Window->m_Title.c_str(),

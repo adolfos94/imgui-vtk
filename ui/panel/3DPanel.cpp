@@ -21,7 +21,7 @@ void ui::panel::ThreeDPanel::gui()
 
 void ui::panel::ThreeDPanel::render()
 {
-	ImGui::Begin(m_name.c_str());
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoMove);
 
 	auto renderer = vtkViewer->getRenderer();
 	renderer->SetBackground(backgroundColor.x, backgroundColor.y, backgroundColor.z);

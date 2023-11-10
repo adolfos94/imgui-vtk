@@ -6,7 +6,7 @@ void ui::panel::InspectorPanel::gui()
 
 void ui::panel::InspectorPanel::render()
 {
-	ImGui::Begin(m_name.c_str());
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoMove);
 
 	ImGui::End();
 }
